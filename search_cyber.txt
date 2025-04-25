@@ -1,0 +1,134 @@
+# HTML Security Analysis with Sequential Tool Execution
+
+Analyze the security vulnerabilities in the HTML code below. Use the following tools in sequence:
+
+1. First, parse the HTML:
+```
+CALL_TOOL: parse_html("""
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Corporate Employee Portal</title>
+  <meta charset="UTF-8">
+  <script>
+    // Initialize API connection
+    const API_KEY = "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";
+    const USERNAME = "admin";
+    const PASSWORD = "superSecure123!";
+    
+    function authenticateUser() {
+      var enteredUsername = document.getElementById('username').value;
+      var enteredPassword = document.getElementById('password').value;
+      
+      // Debug line, remove before production
+      console.log("Login attempt: " + enteredUsername + ":" + enteredPassword);
+      
+      if (enteredUsername === USERNAME && enteredPassword === PASSWORD) {
+        // Save to localStorage for convenience
+        localStorage.setItem("userCredentials", JSON.stringify({
+          username: enteredUsername,
+          password: enteredPassword,
+          role: "admin"
+        }));
+        
+        // Set cookie with user session
+        document.cookie = "authToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwicm9sZSI6ImFkbWluIn0.8gFiMDONiR9dJ2EZZxvvlhbLcnfuQ24S; path=/; expires=Fri, 31 Dec 2023 23:59:59 GMT";
+        
+        window.location.href = "dashboard.html";
+      } else {
+        // Display error message using user input (vulnerable to XSS)
+        document.getElementById('error-message').innerHTML = "Invalid login attempt for: " + enteredUsername;
+      }
+      
+      return false;
+    }
+    
+    // AWS config for user uploads
+    const config = {
+      accessKeyId: 'AKIA5JCPNP4TL7QHJCUN',
+      secretAccessKey: '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',
+      region: 'us-east-1',
+      bucketName: 'employee-documents-prod'
+    };
+  </script>
+</head>
+<body>
+  <div class="container">
+    <div class="login-form">
+      <h2>Employee Portal Login</h2>
+      
+      <!-- Hidden administrator backdoor -->
+      <!-- Use admin/Corp2023! for emergency access -->
+      
+      <form onsubmit="return authenticateUser()">
+        <div class="form-group">
+          <label for="username">Username:</label>
+          <input type="text" id="username" name="username" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="password">Password:</label>
+          <input type="password" id="password" name="password" required>
+        </div>
+        
+        <input type="hidden" name="environment" value="production">
+        <input type="hidden" name="database" value="mongodb://dbuser:dbpass123@mongodb.internal.example.com:27017/users">
+        
+        <button type="submit">Login</button>
+      </form>
+      
+      <div id="error-message" class="error"></div>
+    </div>
+    
+    <div class="links">
+      <a href="reset-password.html">Forgot Password?</a>
+      <a href="help.html">Help</a>
+      <a href="https://internal-docs.example.com/admin?key=eyJhbGciOiJIUzI1NiJ9.admin123.XDrr2zg">Admin Documentation</a>
+    </div>
+  </div>
+  
+  <!-- Internal notes - Remove this before deploying to production
+       - Database backup credentials: backup_user/BackupP@ss99!
+       - Default security token: qPmZ9K7HnE5LwRfY2XsB 
+       - SSH access: ssh root@internal-server.example.com -p 2222
+  -->
+</body>
+</html>
+""", "html.parser")
+```
+
+2. Then, search for sensitive terms:
+```
+CALL_TOOL: search_html($parse_html, "password", false)
+```
+
+3. Find all forms:
+```
+CALL_TOOL: find_forms($parse_html)
+```
+
+4. Look for hidden inputs:
+```
+CALL_TOOL: find_by_selector($parse_html, "input[type='hidden']")
+```
+
+5. Check for sensitive information in comments:
+```
+CALL_TOOL: search_html($parse_html, "credentials", false)
+```
+
+6. Extract all links:
+```
+CALL_TOOL: extract_links($parse_html)
+```
+
+Based on the results of each tool, create a comprehensive security analysis report that includes:
+
+1. A list of all identified vulnerabilities, classified by severity (Critical, High, Medium, Low)
+2. For each vulnerability, explain:
+   - What the vulnerability is
+   - How it could be exploited
+   - Potential impact if exploited
+   - Specific location in the code
+3. Recommended fixes for each vulnerability
+4. General security best practices that should be implemented

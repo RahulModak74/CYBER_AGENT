@@ -1,0 +1,37 @@
+# Web Search Task
+
+Use the web search tools to find information on the following topic and create a comprehensive summary:
+
+"Latest developments in quantum computing"
+
+Follow these steps:
+
+1. First, search for information:
+```
+CALL_TOOL: search_duckduckgo("latest developments in quantum computing", 7, true)
+```
+
+2. Get more detailed information by fetching one of the most relevant webpages:
+```
+CALL_TOOL: fetch_webpage($search_duckduckgo[0].url)
+```
+
+3. Extract the main content from the webpage:
+```
+CALL_TOOL: extract_content($fetch_webpage, 3000)
+```
+
+4. Perform an additional search for a related topic:
+```
+CALL_TOOL: search_and_summarize("quantum computing breakthrough 2024", 5, true)
+```
+
+Based on all the information gathered, create a comprehensive summary that includes:
+
+1. An overview of quantum computing and its importance
+2. Recent major developments and breakthroughs
+3. Key companies and research institutions leading the field
+4. Potential applications and future implications
+5. Challenges and limitations facing quantum computing
+
+Format your response with clear sections, and cite the sources of your information.
