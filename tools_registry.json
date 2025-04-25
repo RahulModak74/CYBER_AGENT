@@ -1,0 +1,35 @@
+{
+  "find_all_elements": {
+    "module": "bs4_tools",
+    "description": "Finds all HTML elements matching the given tag or attributes.",
+    "params": [
+      "soup",
+      "tag",
+      "attributes"
+    ]
+  },
+  "find_element": {
+    "module": "bs4_tools",
+    "description": "Finds the first HTML element matching the given tag or attributes.",
+    "params": [
+      "soup",
+      "tag",
+      "attributes"
+    ]
+  },
+  "get_text": {
+    "module": "bs4_tools",
+    "description": "Extracts text content from an HTML element.",
+    "params": [
+      "element"
+    ]
+  },
+  "parse_html": {
+    "module": "bs4_tools",
+    "description": "Parses HTML content and creates a BeautifulSoup object.",
+    "params": [
+      "html_content",
+      "parser"
+    ]
+  }
+}
