@@ -1,0 +1,67 @@
+# Website Vulnerability Analysis
+
+Analyze the following HTML code for potential security vulnerabilities and privacy issues. 
+
+You MUST use the BeautifulSoup (BS4) tools available to parse and analyze the HTML. Here's how to use the tools:
+
+1. First, parse the HTML using: CALL_TOOL: parse_html(html_content, "html.parser")
+2. Then find elements with: CALL_TOOL: find_all_elements(soup, "tag_name", {"attribute": "value"})
+3. Extract text with: CALL_TOOL: get_text(element)
+
+For example, to find all forms and analyze their methods:
+- First parse the HTML: CALL_TOOL: parse_html(html_content, "html.parser")
+- Then find all forms: CALL_TOOL: find_all_elements(soup, "form", {})
+- For each form, check the method attribute
+
+HTML to analyze:
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SuperSecure Banking</title>
+</head>
+<body>
+    <h1>Welcome to SuperSecure Banking</h1>
+    <div class="login-form">
+        <form action="/login.php" method="GET">
+            <input type="text" name="username" placeholder="Username" />
+            <input type="password" name="password" placeholder="Password" />
+            <input type="hidden" name="admin_access" value="false" />
+            <button type="submit">Login</button>
+        </form>
+    </div>
+    
+    <div class="search-box">
+        <h3>Search Accounts</h3>
+        <form action="/search.php" method="GET">
+            <input type="text" name="query" placeholder="Search..." />
+            <button type="submit">Search</button>
+        </form>
+        <!-- SQL query used: SELECT * FROM accounts WHERE name LIKE '%$query%' -->
+    </div>
+    
+    <div class="user-data" style="display:none;">
+        <p>User cookie: document.cookie</p>
+        <p>Session ID: SESS123456789</p>
+        <p>Credit Card: 4111-1111-1111-1111</p>
+        <script>
+            function displayUserMessage() {
+                var message = new URLSearchParams(window.location.search).get('message');
+                document.getElementById('user-message').innerHTML = message;
+            }
+        </script>
+    </div>
+    
+    <div id="user-message"></div>
+</body>
+</html>
+```
+
+First, use the BS4 tools to parse and examine the HTML structure. Then identify all security issues including:
+
+1. All identified vulnerabilities
+2. The severity of each vulnerability (Critical, High, Medium, Low)
+3. Exploitation vectors and potential impact
+4. Recommended fixes for each vulnerability
+5. A summary of best practices for secure web development
